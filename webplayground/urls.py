@@ -14,11 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from xml.etree.ElementInclude import include
 
 from django.contrib import admin
 from django.urls import path, include
+
 from pages.urls import pages_patterns
+from webplayground import settings
 
 urlpatterns = [
     path('', include('core.urls')),
@@ -26,5 +27,16 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #Paths de Auth
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('registration.urls'))
+
 ]
+
+# custom titles for admin
+admin.site.site_header = 'Gestion Web Playground'
+admin.site.index_title = 'Panel del Administrador'
+admin.site.site_title = 'Gestion Panel'
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
